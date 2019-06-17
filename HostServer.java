@@ -4,10 +4,10 @@ import java.io.*;
 
 public class HostServer implements Runnable {
 	
-	private ServerSocket tcpListener;
 	private Thread tcpThread;
 	private int portNumber = 1533;
-	
+    private ServerSocket tcpListener = new ;
+    
 	public HostServer() {
 		tcpThread = new Thread(this);
 	}

@@ -21,6 +21,7 @@ public class Client {
 		BufferedReader in = new BufferedReader(new InputStreamReader(tcpSocket.getInputStream()));
 		String response = in.readLine();
 		System.out.println(response);
+
 	}
 	
 }

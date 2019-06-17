@@ -6,7 +6,7 @@ public class HostServer implements Runnable {
 	
 	private Thread tcpThread;
 	private int portNumber = 1533;
-    private ServerSocket tcpListener = new ;
+    private ServerSocket tcpListener;
     
 	public HostServer() {
 		tcpThread = new Thread(this);
@@ -19,6 +19,7 @@ public class HostServer implements Runnable {
     public void run() {
         while(true){
             try{
+            	tcpListener = new ServerSocket(this.portNumber) ;
                 Socket tcpSocket = tcpListener.accept();
                 BufferedReader in = new BufferedReader(new InputStreamReader(tcpSocket.getInputStream()));
                 String input = in.readLine();

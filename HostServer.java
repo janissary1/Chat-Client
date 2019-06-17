@@ -1,3 +1,4 @@
+//Written by Daniel Bellissimo
 import java.net.*;
 import java.io.*;
 
@@ -31,16 +32,16 @@ public class HostServer implements Runnable {
                 if(received_data[0].equals("daniel") && received_data[1].equals("pass1")){ //should do a username/password lookup and THEN spawn thread
                     
                     pw.println("Authentication Successful");
+                    //Send coversation data
                     pw.println("Content-Type: image/jpeg");
                     pw.println("");
                     pw.flush();
-
-                    // Write the file to the output buffer
-                    Files.copy(file.toPath(), out);
                     out.flush();
                 }
                 else {
-                	
+                	pw.println("Authentication Unsuccessful");
+                	pw.flush();
+                	out.flush();
                 }
                 tcpSocket.close();
             }

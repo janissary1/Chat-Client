@@ -15,13 +15,16 @@ public class Client {
 	}
 	public void connect() throws Exception {
 		tcpSocket = new Socket(host_server,portNumber);
+		
 		OutputStream out = tcpSocket.getOutputStream();
 		PrintWriter pw = new PrintWriter(out);
-		pw.write("daniel:Pass1");
+		pw.println("daniel:Pass1");
+		pw.flush();
 		BufferedReader in = new BufferedReader(new InputStreamReader(tcpSocket.getInputStream()));
-		String response = in.readLine();
-		System.out.println(response);
-
+		String data = null;
+		while ((data = in.readLine()) != null ) {
+            System.out.println(data);
+        }
 	}
 	
 }

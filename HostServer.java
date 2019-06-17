@@ -19,21 +19,28 @@ public class HostServer implements Runnable {
     public void run() {
         while(true){
             try{
-            	tcpListener = new ServerSocket(this.portNumber) ;
+            	tcpListener = new ServerSocket(this.portNumber);
+            	System.out.println("Listening...");
                 Socket tcpSocket = tcpListener.accept();
-                BufferedReader in = new BufferedReader(new InputStreamReader(tcpSocket.getInputStream()));
-                String input = in.readLine();
+                System.out.println("Connected: " + tcpSocket.getRemoteSocketAddress());
                 
+                BufferedReader in = new BufferedReader(new InputStreamReader(tcpSocket.getInputStream()));
+                
+                String data = null;
+                while ((data = in.readLine()) != null ) {
+                    System.out.println(data);
+                }
+                /*
                 //TODO: Add decryption/encryption
                 //daniel:pass1
-                String[] received_data = input.split(":");
+                String[] received_data = data.split(":");
                 OutputStream out = tcpSocket.getOutputStream();
                 PrintWriter pw = new PrintWriter(out);
                 
                 if(received_data[0].equals("daniel") && received_data[1].equals("pass1")){ //should do a username/password lookup and THEN spawn thread
                     
                     pw.println("Authentication Successful");
-                    //Send coversation data
+                    //Send conversation data
                     pw.println("Content-Type: image/jpeg");
                     pw.println("");
                     pw.flush();
@@ -44,7 +51,7 @@ public class HostServer implements Runnable {
                 	pw.flush();
                 	out.flush();
                 }
-                tcpSocket.close();
+                tcpSocket.close();*/
             }
             catch (Exception ignore){}
         }

@@ -18,13 +18,14 @@ public class Client {
 		
 		OutputStream out = tcpSocket.getOutputStream();
 		PrintWriter pw = new PrintWriter(out);
-		pw.println("daniel:Pass1");
+		pw.println("daniel:pass1");
 		pw.flush();
 		BufferedReader in = new BufferedReader(new InputStreamReader(tcpSocket.getInputStream()));
 		String data = null;
+		/*
 		while ((data = in.readLine()) != null ) {
             System.out.println(data);
-        }
+        }*/
 	}
 	
 }

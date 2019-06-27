@@ -17,8 +17,10 @@ public class HostServer implements Executor {
 	/*Start the server which handles authentication requests and then spawns threads for successfully authenticated users*/
 	
 	public void execute(Runnable client) {
+        Client_Instance client_h = ((Client_Instance) client);
+        String name = client_h.name;
 		Thread client_thread = new Thread(client);
-		client_thread.setName(((Client_Instance) client).getclientName());
+		client_thread.setName(name);
 		client_thread.start();
 	}
 	/*
@@ -32,10 +34,10 @@ public class HostServer implements Executor {
 	
 	//'Starts' the server
 	public void serve_connections() {
+        //1| Starts socket, accepts incoming connection, creates Buffered reader object for reading data from client
+        try{tcpListener = new ServerSocket(this.portNumber);}catch(IOException e){}
 		while(true) {
 			try {
-			//1| Starts socket, accepts incoming connection, creates Buffered reader object for reading data from client
-			tcpListener = new ServerSocket(this.portNumber);
         	System.out.println("Listening...");
             Socket tcpSocket = tcpListener.accept();
             System.out.println("Connection Attempt from: " + tcpSocket.getRemoteSocketAddress());
@@ -66,7 +68,9 @@ public class HostServer implements Executor {
             	//Spawn Thread using the already instantiated TCP socket object, input buffer and output stream
                 this.execute(new Client_Instance(received_data[0],tcpSocket,in,out));
                 this.connections_n += 1;
-            	System.out.println("Authentication Successful");
+                System.out.println("Authentication Successful");
+                Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+                for(Thread i : threadSet){System.out.println(i.getName());}
             	pw.println("Authentication Successful");
                 pw.flush();
                 out.flush();

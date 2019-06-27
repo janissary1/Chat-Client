@@ -7,20 +7,17 @@ import java.net.Socket;
 
 public class Client_Instance implements Runnable {
 	
-	private String client;
+	public String name;
 	private Socket tcpSocket;
 	private BufferedReader in;
 	private OutputStream out; 
-	private boolean thread_flag = true; //for thread killing
+	private volatile boolean thread_flag = true; //for thread killing
 	
-	public Client_Instance(String client,Socket tcpSocket, BufferedReader in, OutputStream out) {
-		this.client = client;
+	public Client_Instance(String name,Socket tcpSocket, BufferedReader in, OutputStream out) {
+		this.name = name;
 		this.tcpSocket = tcpSocket;
 		this.in = in;
 		this.out = out;
-	}
-	public String getclientName() {
-		return this.client;
 	}
 	public void stop() {
 		this.thread_flag = false;
@@ -28,14 +25,15 @@ public class Client_Instance implements Runnable {
 	
 	@Override
     public void run() {
-        System.out.println("Thread: " + client +  " ...Started Fine");
+		while (thread_flag){
+        System.out.println("Thread: " + name +  " ...Started Fine");
         try {
         tcpSocket.close();
 		 while(thread_flag){
 			 
 		 }
         }catch(IOException e) {}
-        
+	}
 	
 	}
 

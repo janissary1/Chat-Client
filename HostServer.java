@@ -23,14 +23,16 @@ public class HostServer implements Executor {
 		client_thread.setName(name);
 		client_thread.start();
 	}
-	/*
-	public void stop_thread(String client_name) {
+	public void printThreadNames() {
 		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-		for(Thread i : threadSet) {
-			if(i.getName().equals(client_name)) {i.}
-		}
+        for(Thread i : threadSet){System.out.println(i.getName());}
+	}
+	
+	public void Interrupt_thread(String client_name) {
+		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+		for(Thread i : threadSet) {if(i.getName().equals(client_name)) {i.interrupt();}}
 
-	}*/
+	}
 	
 	//'Starts' the server
 	public void serve_connections() {
@@ -69,8 +71,16 @@ public class HostServer implements Executor {
                 this.execute(new Client_Instance(received_data[0],tcpSocket,in,out));
                 this.connections_n += 1;
                 System.out.println("Authentication Successful");
-                Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-                for(Thread i : threadSet){System.out.println(i.getName());}
+                this.printThreadNames();
+                
+                int i = 10;
+                while (i > 0) {
+                	System.out.println(i);
+                	try {Thread.sleep(1000);}catch(Exception e) {}
+                	i-=1;
+                	
+                }
+                
             	pw.println("Authentication Successful");
                 pw.flush();
                 out.flush();

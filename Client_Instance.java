@@ -25,15 +25,12 @@ public class Client_Instance implements Runnable {
 	
 	@Override
     public void run() {
-		while (thread_flag){
-        System.out.println("Thread: " + name +  " ...Started Fine");
-        try {
-        tcpSocket.close();
-		 while(thread_flag){
-			 
-		 }
-        }catch(IOException e) {}
-	}
+		while (!Thread.interrupted()){
+        System.out.println("Thread: " + name +  " ...Running");
+        try {Thread.sleep(1000);}catch(Exception e) {}
+        }
+		System.out.println("Thread stopped sucessfully");
+		try {tcpSocket.close();}catch(IOException e) {}
 	
 	}
 

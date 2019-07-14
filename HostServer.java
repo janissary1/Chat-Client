@@ -1,5 +1,6 @@
 //Written by Daniel Bellissimo
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.Executor;
 import java.io.*;
@@ -9,6 +10,7 @@ public class HostServer implements Executor {
 	private Thread tcpThread;
 	private int portNumber = 1533,connections_n = 0;
     private ServerSocket tcpListener;
+    private ArrayList<Client_Instance> client_instances = new ArrayList<Client_Instance>();
     public static void main(String[] args) {
     	HostServer server = new HostServer();
     	server.serve_connections();
@@ -18,9 +20,9 @@ public class HostServer implements Executor {
 	
 	public void execute(Runnable client) {
         Client_Instance client_h = ((Client_Instance) client);
-        String name = client_h.name;
-		Thread client_thread = new Thread(client);
-		client_thread.setName(name);
+        this.client_instances.add(client_h);
+		Thread client_thread = new Thread(client_h);
+		client_thread.setName(client_h.name);
 		client_thread.start();
 	}
 	public void printThreadNames() {
@@ -29,8 +31,10 @@ public class HostServer implements Executor {
 	}
 	
 	public void Interrupt_thread(String client_name) {
-		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-		for(Thread i : threadSet) {if(i.getName().equals(client_name)) {i.interrupt();}}
+		for(Client_Instance i : client_instances) {if(i.name.equals(client_name)) {
+			System.out.println("Attempting to Interrupt:" + i.name);
+			i.interrupt();}
+		}
 
 	}
 	
@@ -40,8 +44,8 @@ public class HostServer implements Executor {
         try{tcpListener = new ServerSocket(this.portNumber);}catch(IOException e){}
 		while(true) {
 			try {
-        	System.out.println("Listening...");
-            Socket tcpSocket = tcpListener.accept();
+        	System.out.println("Listening for a connection...");
+            Socket tcpSocket = tcpListener.accept(); //blocks here
             System.out.println("Connection Attempt from: " + tcpSocket.getRemoteSocketAddress());
             BufferedReader in = new BufferedReader(new InputStreamReader(tcpSocket.getInputStream()));
             //1\
@@ -72,14 +76,6 @@ public class HostServer implements Executor {
                 this.connections_n += 1;
                 System.out.println("Authentication Successful");
                 this.printThreadNames();
-                
-                int i = 10;
-                while (i > 0) {
-                	System.out.println(i);
-                	try {Thread.sleep(1000);}catch(Exception e) {}
-                	i-=1;
-                	
-                }
                 
             	pw.println("Authentication Successful");
                 pw.flush();

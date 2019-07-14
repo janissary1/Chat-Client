@@ -11,7 +11,7 @@ public class Client_Instance implements Runnable {
 	private Socket tcpSocket;
 	private BufferedReader in;
 	private OutputStream out; 
-	private volatile boolean thread_flag = true; //for thread killing
+	private volatile boolean interrupted = false; //for thread killing
 	
 	public Client_Instance(String name,Socket tcpSocket, BufferedReader in, OutputStream out) {
 		this.name = name;
@@ -19,15 +19,20 @@ public class Client_Instance implements Runnable {
 		this.in = in;
 		this.out = out;
 	}
-	public void stop() {
-		this.thread_flag = false;
+	
+	public void interrupt() {
+		this.interrupted = true;
+	}
+	
+	public boolean getInterrupt() {
+		return this.interrupted;
 	}
 	
 	@Override
     public void run() {
-		while (!Thread.interrupted()){
-        System.out.println("Thread: " + name +  " ...Running");
-        try {Thread.sleep(1000);}catch(Exception e) {}
+		while (!this.interrupted){
+        System.out.println("Thread: " + name +  " ...Running. Interrupt: " + this.interrupted);
+        try {Thread.sleep(1000);}catch(InterruptedException e) {}
         }
 		System.out.println("Thread stopped sucessfully");
 		try {tcpSocket.close();}catch(IOException e) {}

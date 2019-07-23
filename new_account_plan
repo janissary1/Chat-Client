@@ -1,0 +1,10 @@
+New Account flow:
+    Create account in app:
+    fill out form:
+        -Account Name
+        -Password
+        -Email address? Cell phone number? MAC address?????
+    Client sends data  to server:
+        Server:
+            -checks database if account already exists, returns result to client 
+            -If account name is good, then display success screen ...login? send email?
